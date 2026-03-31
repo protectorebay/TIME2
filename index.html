@@ -2,85 +2,69 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>World Clock</title>
+<title>Clock Strip</title>
 <style>
     body {
+        margin: 0;
+        background: transparent;
         font-family: Arial, sans-serif;
-        background: #0f172a;
-        color: #e5e7eb;
+    }
+
+    .strip {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        gap: 8px;
+        padding: 6px;
     }
-    .container {
+
+    .box {
+        background: rgba(40, 40, 40, 0.9);
+        padding: 6px 14px;
         text-align: center;
+        color: white;
+        min-width: 110px;
     }
-    .clock {
-        font-size: 28px;
-        margin: 10px 0;
+
+    .city {
+        font-size: 13px;
+        color: #cbd5e1;
+        margin-bottom: 2px;
     }
-    .label {
-        font-size: 14px;
-        color: #94a3b8;
+
+    .time {
+        font-size: 20px;
+        font-weight: 700; /* bold */
+        letter-spacing: 1px;
     }
 </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="clock">
-        <div class="label">Bratislava</div>
-        <div id="sk"></div>
-    </div>
-
-    <div class="clock">
-        <div class="label">New York</div>
-        <div id="ny"></div>
-    </div>
-
-    <div class="clock">
-        <div class="label">London</div>
-        <div id="ldn"></div>
-    </div>
-
-    <div class="clock">
-        <div class="label">Tokyo</div>
-        <div id="tokyo"></div>
-    </div>
+<div class="strip">
+    <div class="box"><div class="city">New York</div><div id="ny" class="time"></div></div>
+    <div class="box"><div class="city">London</div><div id="ldn" class="time"></div></div>
+    <div class="box"><div class="city">Paris</div><div id="paris" class="time"></div></div>
+    <div class="box"><div class="city">Tokyo</div><div id="tokyo" class="time"></div></div>
 </div>
 
 <script>
-function updateClocks() {
-    const options = {
+function update() {
+    const opt = {
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
         hour12: false
     };
 
-    document.getElementById('sk').textContent =
-        new Date().toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/Bratislava' });
-
-    document.getElementById('ny').textContent =
-        new Date().toLocaleTimeString('en-US', { ...options, timeZone: 'America/New_York' });
-
-    document.getElementById('ldn').textContent =
-        new Date().toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/London' });
-
-    document.getElementById('tokyo').textContent =
-        new Date().toLocaleTimeString('en-GB', { ...options, timeZone: 'Asia/Tokyo' });
+    ny.textContent = new Date().toLocaleTimeString('en-US', {...opt, timeZone:'America/New_York'});
+    ldn.textContent = new Date().toLocaleTimeString('en-GB', {...opt, timeZone:'Europe/London'});
+    paris.textContent = new Date().toLocaleTimeString('en-GB', {...opt, timeZone:'Europe/Paris'});
+    tokyo.textContent = new Date().toLocaleTimeString('en-GB', {...opt, timeZone:'Asia/Tokyo'});
 }
 
-// presná synchronizácia na sekundu (žiadny drift)
-function startClock() {
-    updateClocks();
-    setTimeout(() => {
-        startClock();
-    }, 1000 - new Date().getMilliseconds());
+function loop(){
+    update();
+    setTimeout(loop, 1000 - new Date().getMilliseconds());
 }
-
-startClock();
+loop();
 </script>
 
 </body>
