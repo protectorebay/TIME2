@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>World Clock</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: #e5e7eb;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        text-align: center;
+    }
+    .clock {
+        font-size: 28px;
+        margin: 10px 0;
+    }
+    .label {
+        font-size: 14px;
+        color: #94a3b8;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="clock">
+        <div class="label">Bratislava</div>
+        <div id="sk"></div>
+    </div>
+
+    <div class="clock">
+        <div class="label">New York</div>
+        <div id="ny"></div>
+    </div>
+
+    <div class="clock">
+        <div class="label">London</div>
+        <div id="ldn"></div>
+    </div>
+
+    <div class="clock">
+        <div class="label">Tokyo</div>
+        <div id="tokyo"></div>
+    </div>
+</div>
+
+<script>
+function updateClocks() {
+    const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    };
+
+    document.getElementById('sk').textContent =
+        new Date().toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/Bratislava' });
+
+    document.getElementById('ny').textContent =
+        new Date().toLocaleTimeString('en-US', { ...options, timeZone: 'America/New_York' });
+
+    document.getElementById('ldn').textContent =
+        new Date().toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/London' });
+
+    document.getElementById('tokyo').textContent =
+        new Date().toLocaleTimeString('en-GB', { ...options, timeZone: 'Asia/Tokyo' });
+}
+
+// presná synchronizácia na sekundu (žiadny drift)
+function startClock() {
+    updateClocks();
+    setTimeout(() => {
+        startClock();
+    }, 1000 - new Date().getMilliseconds());
+}
+
+startClock();
+</script>
+
+</body>
+</html>
